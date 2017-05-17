@@ -2,6 +2,7 @@ function Balancer() {
 
   // --- Data ----
   this.capital = 1000;
+  // this.transaction cost - coming soon
   this.stocks = [
     {
       ticker: 'XIC',
