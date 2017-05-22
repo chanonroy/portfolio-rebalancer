@@ -1,0 +1,23 @@
+// COLORS
+$color-font: #384047;
+$color-background: #F3F5F7;
+
+[v-cloak] { // for Vue.js, hides until Vue.js fully loads
+   display: none;
+ }
+
+body {
+ margin: 0;
+ margin-bottom: 30px;
+ font-family: 'Open Sans', sans-serif;
+ color: $color-font;
+ background-color: $color-background;
+ ul {
+   padding: 0;
+   list-style-type: none;
+ }
+ a {
+   color: inherit;
+   text-decoration: none;
+ }
+}
