@@ -4,17 +4,70 @@
      <meta charset="utf-8">
      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
      <meta name="viewport" content="width=device-width, initial-scale=1">
-     <title> Rebalancer </title>
+     <title> Portfolio Rebalancer </title>
+     <link rel="shortcut icon" href="dist/assets/coins.png" type="image/x-icon">
+     <link rel="icon" href="dist/assets/coins.png" type="image/x-icon">
      <link rel="stylesheet" type="text/css" href="dist/css/main.css">
    </head>
    <body>
 
      <div id="balancer" v-cloak>
-      <div class="container">
-        <h1> Hello, World! </h1>
-        {{ message }}
-      </div>
-     </div>
+       <div class="container">
+
+          <div v-if="total_capital > 0"> {{ total_capital }} </div>
+
+          <el-button type="primary" @click="tickerModal = true"> Add Ticker </el-button>
+
+          <!-- Portfolio Display -->
+          <div v-if="portfolio.length > 0" v-for="stock in portfolio">
+            <div> {{ stock.ticker }} </div>
+            <div> {{ stock.price }} </div>
+            <div> {{ stock.quantity }} </div>
+            <div> {{ stock.value }} </div>
+            <div> {{ stock.target }}% </div>
+          </div>
+
+          <!-- Modal -->
+          <el-dialog title="Add a stock to your portfolio" v-model="tickerModal" size="tiny">
+
+            <el-form label-position="top" :model="tickerForm">
+              <el-row :gutter="10">
+
+                <el-col :lg="12">
+                  <el-form-item label="Ticker">
+                    <el-input v-model="tickerForm.ticker"></el-input>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :lg="12">
+                  <el-form-item label="Target Allocation">
+                    <el-input v-model="tickerForm.target"></el-input>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :lg="12">
+                  <el-form-item label="Price">
+                    <el-input v-model="tickerForm.price"></el-input>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :lg="12">
+                  <el-form-item label="Quantity">
+                    <el-input v-model="tickerForm.quantity"></el-input>
+                  </el-form-item>
+                </el-col>
+
+              </el-row>
+            </el-form>
+
+            <span slot="footer" class="dialog-footer">
+              <el-button type="primary" @click="modal_submit"> Confirm </el-button>
+              <el-button type="text" @click="tickerModal = false"> Cancel </el-button>
+            </span>
+          </el-dialog>
+
+       </div>
+      </div> <!-- #balancer -->
 
      <script type="text/javascript" src="dist/js/main.js"></script>
    </body>
