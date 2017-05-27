@@ -17,15 +17,20 @@
           <div v-if="total_capital > 0"> {{ total_capital }} </div>
 
           <el-button type="primary" @click="tickerModal = true"> Add Ticker </el-button>
+          <el-button type="primary" @click="get_action"> Get Report </el-button>
 
           <!-- Portfolio Display -->
           <div v-if="portfolio.length > 0" v-for="stock in portfolio">
             <div> {{ stock.ticker }} </div>
-            <div> {{ stock.price }} </div>
-            <div> {{ stock.quantity }} </div>
-            <div> {{ stock.value }} </div>
-            <div> {{ stock.target }}% </div>
+            <div> ${{ stock.price }} </div>
+            <div> {{ stock.quantity }} quantity </div>
+            <div> ${{ stock.value }} total value </div>
+            <div> Target: {{ stock.target * 100 }}% </div>
+            <br>
           </div>
+
+          <br>
+          <div> {{ actions }} </div>
 
           <!-- Modal -->
           <el-dialog title="Add a stock to your portfolio" v-model="tickerModal" size="tiny">

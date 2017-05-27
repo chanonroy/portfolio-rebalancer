@@ -41598,11 +41598,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_element_ui__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_element_ui___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_element_ui__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_element_ui_lib_theme_default_index_css__ = __webpack_require__(74);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_element_ui_lib_theme_default_index_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_element_ui_lib_theme_default_index_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__scss_main_scss__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__scss_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__scss_main_scss__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__assets_assets_js__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utility_js__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_element_ui_lib_theme_default_index_css__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_element_ui_lib_theme_default_index_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_element_ui_lib_theme_default_index_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__scss_main_scss__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__scss_main_scss___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__scss_main_scss__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__assets_assets_js__ = __webpack_require__(24);
 // Importing
 
 
@@ -41611,7 +41612,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_element_ui___default.a);
+
+// utility functions from utility.js
+var tools = new __WEBPACK_IMPORTED_MODULE_2__utility_js__["a" /* default */]();
 
 var balancer = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
   el: '#balancer',
@@ -41624,7 +41629,8 @@ var balancer = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
       target: ''
     },
     portfolio: [],
-    cash: 0
+    cash: 0,
+    actions: []
   },
   computed: {
     total_capital() {
@@ -41635,6 +41641,45 @@ var balancer = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
     }
   },
   methods: {
+    /**
+    * {Float} price - price of stock
+    * {Float} total_money - total assets
+    * {Float} target - percentage (out of 1)
+    */
+    optimal_calc(price, total_money, target) {
+
+      var tmp = target * total_money / price;
+      var optimal = Number(tmp);
+      return optimal;
+    },
+
+    /**
+    * {Float} optimal - ideal percentage
+    * {Number} total_money - total capital
+    */
+    rebalance(optimal, quantity) {
+
+      var delta = optimal - quantity;
+      return delta;
+    },
+
+    get_action() {
+      var local_actions = [];
+
+      for (var i in this.portfolio) {
+
+        let optimal = this.optimal_calc(this.portfolio[i].price, this.total_capital, this.portfolio[i].target);
+
+        let delta = this.rebalance(optimal, this.portfolio[i].quantity);
+
+        if (delta !== 0) {
+          local_actions.push({ ticker: this.portfolio[i].ticker, action: Math.round(delta) });
+        }
+      }
+
+      this.actions = local_actions;
+    },
+
     modal_submit() {
       let form = this.tickerForm;
 
@@ -41650,7 +41695,7 @@ var balancer = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
         ticker: form.ticker.toUpperCase(),
         quantity: form.quantity,
         price: form.price,
-        target: form.target,
+        target: form.target / 100,
         value: value
       });
 
@@ -48164,6 +48209,44 @@ module.exports = g;
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = Tools;
+function Tools() {
+
+  this.add_commas = function (value) {
+    // add commas to a number
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  this.add_abbrev = function (value) {
+    // calculate abbreviated numbers (e.g. 1,000 is 1K)
+    var str = value.toString();
+    if (str.length < 7) {
+      // 1,000 (1K)
+      return str > 999 ? (Math.floor(str / 1000 * 10) / 10).toString() + 'K' : str;
+    } else if (str.length < 10) {
+      // 1,000,000 (1M)
+      return str > 999999 ? (Math.floor(str / 1000000 * 10) / 10).toString() + 'M' : str;
+    } else {
+      // 1,000,000,000 (1B)
+      return str > 999999999 ? (Math.floor(str / 1000000000 * 10) / 10).toString() + 'B' : str;
+    }
+  };
+}
 
 /***/ })
 /******/ ]);
