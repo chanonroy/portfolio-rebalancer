@@ -22,18 +22,40 @@ var balancer = new Vue({
       price: '',
       target: '',
     },
-    portfolio: [],
+    portfolio: [
+      {
+        ticker: 'VIC',
+        quantity: 5,
+        price: 10,
+        target: 0.5,
+        value: 50
+      },
+      {
+        ticker: 'CIX',
+        quantity: 10,
+        price: 3,
+        target: 0.5,
+        value: 30
+      }
+    ],
     cash: 0,
     actions: []
   },
   computed: {
     total_capital() {
+      // total value of assets plus cash
       let total = this.portfolio.reduce(function(acc, stock) {
         return acc + stock.value;
       }, 0);
       return total + this.cash;
-
     },
+    total_allocation() {
+      // total target allocation of portfolio
+      let total = this.portfolio.reduce(function(acc, stock) {
+        return acc + stock.target;
+      }, 0);
+      return total;
+    }
   },
   methods: {
     /**
@@ -64,18 +86,14 @@ var balancer = new Vue({
       var local_actions = [];
 
       for (var i in this.portfolio) {
-
         let optimal = this.optimal_calc(this.portfolio[i].price, this.total_capital, this.portfolio[i].target);
-
         let delta = this.rebalance(optimal, this.portfolio[i].quantity);
-
         if (delta !== 0) {
           local_actions.push({ ticker: this.portfolio[i].ticker, action: Math.round(delta) })
         }
       }
 
       this.actions = local_actions;
-
     },
 
     modal_submit() {
@@ -93,8 +111,8 @@ var balancer = new Vue({
         ticker: form.ticker.toUpperCase(),
         quantity: form.quantity,
         price: form.price,
+        value: value,
         target: form.target / 100,
-        value: value
       })
 
       // clear old form
