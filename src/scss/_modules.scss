@@ -1,9 +1,19 @@
 .card {
+  // basic card class with padding
   background-color: white;
   box-shadow: $shadow-default;
   border-radius: $border-radius-default;
   margin: 7px 0;
   padding: 20px;
+}
+
+.stats-header {
+  // header for statistics
+  text-align: center;
+  padding: 50px 0;
+  margin-bottom: 50px;
+  h2 { margin-bottom: 5px; }
+  background-color: white;
 }
 
 .row-header {

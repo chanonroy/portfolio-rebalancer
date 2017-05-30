@@ -41680,19 +41680,22 @@ var balancer = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
     actions: []
   },
   computed: {
-    total_capital() {
-      // total value of assets plus cash
-      let total = this.portfolio.reduce(function (acc, stock) {
+    total_value() {
+      let value = this.portfolio.reduce(function (acc, stock) {
         return acc + stock.value;
       }, 0);
-      return total + this.cash;
+      return value;
+    },
+    total_capital() {
+      // total value of assets plus cash
+      return this.total_value + this.cash;
     },
     total_allocation() {
       // total target allocation of portfolio
-      let total = this.portfolio.reduce(function (acc, stock) {
+      let allocation = this.portfolio.reduce(function (acc, stock) {
         return acc + stock.target;
       }, 0);
-      return total;
+      return allocation;
     }
   },
   methods: {

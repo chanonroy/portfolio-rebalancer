@@ -10,7 +10,7 @@ $color-dark-blue: #203B56;
 $color-light-blue: #4DBAF4;
 
 $shadow-default: 0 0.5px 0.5px 0 rgba(0,0,0,.15);
-$border-radius-default: 5px;
+$border-radius-default: 3px;
 $transition-custom: all 0.3s ease;
 
 
@@ -32,4 +32,8 @@ body {
    color: inherit;
    text-decoration: none;
  }
+}
+
+h1, h2, h3, h4, h5 {
+  margin: 0;
 }

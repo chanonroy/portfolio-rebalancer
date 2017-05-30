@@ -12,27 +12,52 @@
    <body>
 
      <div id="balancer" v-cloak>
-       <div class="container">
 
-          <div v-if="total_capital > 0"> {{ total_capital }} </div>
-          <div> total cap </div> <br>
+      <!-- Jumbotron -->
+      <div class="jumbo">
 
-          <div> {{ total_allocation * 100 }}% </div>
-          <div> target allocation </div> <br>
+      </div>
 
+      <div class="container-fluid stats-header">
+         <div class="container">
 
-          <div> {{ actions }} </div>
+           <!-- Stats Header -->
+           <el-row :gutter="10">
+             <el-col :sm="6" class="vertical-divide">
+               <h2 v-if="total_capital > 0"> ${{ total_capital }} </h2>
+               <div class="text-muted"> Total Capital </div>
+             </el-col>
+             <el-col :sm="6" class="vertical-divide">
+               <h2> ${{ cash }} </h2>
+               <div class="text-muted"> Cash Value </div>
+             </el-col>
+             <el-col :sm="6" class="vertical-divide">
+               <h2> ${{ total_value }} </h2>
+               <div class="text-muted"> Stock Value </div>
+             </el-col>
+             <el-col :sm="6">
+               <h2> {{ total_allocation * 100 }}% </h2>
+               <div class="text-muted"> Target Allocation </div> <br>
+             </el-col>
+           </el-row>
 
-          <!-- Button -->
+         </div>
+      </div>
+
+        <div class="container" style="padding-top: 25px;">
+
+          <!-- Portfolio Header -->
           <el-row>
-            <el-col :sm="19"> &nbsp; </el-col>
+            <el-col :sm="19">
+              <h1> Portfolio Breakdown </h1>
+            </el-col>
             <el-col :sm="5" class="flex-end">
               <el-button type="primary" @click="tickerModal = true"> Add Ticker </el-button>
               <el-button type="primary" @click="get_action"> Get Report </el-button>
             </el-col>
           </el-row>
 
-          <div v-if="portfolio.length > 0" style="margin-top: 50px;">
+          <div v-if="portfolio.length > 0" style="margin-top: 20px;">
 
             <el-row class="row-header text-muted">
               <el-col :sm="5"> Name </el-col>
@@ -102,7 +127,10 @@
             </span>
           </el-dialog>
 
+        <div v-if="actions.length > 0"> {{ actions }} </div>
+
        </div>
+
       </div> <!-- #balancer -->
 
      <script type="text/javascript" src="dist/js/main.js"></script>

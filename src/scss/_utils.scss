@@ -3,13 +3,11 @@
 }
 
 // Fonts ----
-
 .text-muted {
   color: lighten(grey, 20%);
 }
 
-// FLEXBOX ----
-
+// Flexbox ----
 .flex-center {
   display: flex;
   justify-content: center;
@@ -18,4 +16,14 @@
 .flex-end {
   display: flex;
   justify-content: flex-end;
+}
+
+.flex-align-center {
+  display: flex;
+  align-items: center;
+}
+
+// Other ----
+.vertical-divide {
+  border-right: 1px solid lightgrey;
 }
