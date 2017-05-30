@@ -15,38 +15,53 @@
        <div class="container">
 
           <div v-if="total_capital > 0"> {{ total_capital }} </div>
+          <div> total cap </div> <br>
 
+          <div> {{ total_allocation * 100 }}% </div>
+          <div> target allocation </div> <br>
+
+
+          <div> {{ actions }} </div>
+
+          <!-- Button -->
           <el-row>
-            <el-col :sm="17"> &nbsp; </el-col>
-            <el-col :sm="7">
+            <el-col :sm="19"> &nbsp; </el-col>
+            <el-col :sm="5" class="flex-end">
               <el-button type="primary" @click="tickerModal = true"> Add Ticker </el-button>
-              <el-button type="primary"> Edit </el-button>
               <el-button type="primary" @click="get_action"> Get Report </el-button>
             </el-col>
           </el-row>
 
-          <br>
+          <div v-if="portfolio.length > 0" style="margin-top: 50px;">
 
-          <el-row style="text-align: center;">
-            <el-col :sm="4"> Ticker </el-col>
-            <el-col :sm="4"> Price </el-col>
-            <el-col :sm="4"> Quantity </el-col>
-            <el-col :sm="4"> Value </el-col>
-            <el-col :sm="4"> Target </el-col>
-            <el-col :sm="4"> Actual </el-col>
-          </el-row>
+            <el-row class="row-header text-muted">
+              <el-col :sm="5"> Name </el-col>
+              <el-col :sm="3"> Quantity </el-col>
+              <el-col :sm="3"> Price </el-col>
+              <el-col :sm="3"> Value </el-col>
+              <el-col :sm="3"> Target </el-col>
+              <el-col :sm="3"> Actual </el-col>
+              <el-col :sm="3"> Action </el-col>
+              <el-col :sm="1"> &nbsp; </el-col>
+            </el-row>
 
-          <el-row v-if="portfolio.length > 0" v-for="stock in portfolio" style="text-align: center;">
-            <el-col :sm="4"> {{ stock.ticker }} </el-col>
-            <el-col :sm="4"> ${{ stock.price }} </el-col>
-            <el-col :sm="4"> {{ stock.quantity }} </el-col>
-            <el-col :sm="4"> ${{ stock.value }} </el-col>
-            <el-col :sm="4"> {{ stock.target * 100 }}% </el-col>
-            <el-col :sm="4"> {{ stock.value / total_capital * 100 }}% </el-col>
-          </el-row>
+            <div class="card" v-for="stock in portfolio">
+              <el-row v-if="portfolio.length > 0">
+                <el-col :sm="5"> {{ stock.ticker }} </el-col>
+                <el-col :sm="3"> {{ stock.quantity }} </el-col>
+                <el-col :sm="3"> ${{ stock.price }} </el-col>
+                <el-col :sm="3"> ${{ stock.value }} </el-col>
+                <el-col :sm="3"> {{ stock.target * 100 }}% </el-col>
+                <el-col :sm="3"> {{ Math.round(stock.value / total_capital * 100) }}% </el-col>
+                <el-col :sm="3"> -- </el-col>
+                <el-col :sm="1">
+                  <i class="fa fa-pencil fa-fw" aria-hidden="true"></i>
+                  <i class="fa fa-trash fa-fw" aria-hidden="true"></i>
+                </el-col>
+              </el-row>
+            </div>
 
-          <br>
-          <div> {{ actions }} </div>
+          </div>
 
           <!-- Modal -->
           <el-dialog title="Add a stock to your portfolio" v-model="tickerModal" size="tiny">

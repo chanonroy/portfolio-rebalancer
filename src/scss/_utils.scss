@@ -1,0 +1,21 @@
+.padding-default {
+  padding: 20px;
+}
+
+// Fonts ----
+
+.text-muted {
+  color: lighten(grey, 20%);
+}
+
+// FLEXBOX ----
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+}
+
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
+}

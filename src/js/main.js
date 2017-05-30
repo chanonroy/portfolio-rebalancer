@@ -26,16 +26,16 @@ var balancer = new Vue({
       {
         ticker: 'VIC',
         quantity: 5,
-        price: 10,
+        price: 10.21,
         target: 0.5,
-        value: 50
+        value: 51.05
       },
       {
         ticker: 'CIX',
         quantity: 10,
-        price: 3,
+        price: 3.68,
         target: 0.5,
-        value: 30
+        value: 36.8
       }
     ],
     cash: 0,

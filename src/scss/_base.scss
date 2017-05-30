@@ -6,6 +6,14 @@ $fa-font-path: "~font-awesome/fonts";
 $color-font: #384047;
 $color-background: #F3F5F7;
 
+$color-dark-blue: #203B56;
+$color-light-blue: #4DBAF4;
+
+$shadow-default: 0 0.5px 0.5px 0 rgba(0,0,0,.15);
+$border-radius-default: 5px;
+$transition-custom: all 0.3s ease;
+
+
 [v-cloak] { // for Vue.js, hides until Vue.js fully loads
    display: none;
  }
