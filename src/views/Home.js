@@ -33,6 +33,7 @@ export class Home extends React.Component {
     this.total_value = this.total_value.bind(this);
     this.total_allocation = this.total_allocation.bind(this);
     this.toggle_modal = this.toggle_modal.bind(this);
+    this.modal_success = this.modal_success.bind(this);
   }
 
   // Computed Properties ----
@@ -40,7 +41,6 @@ export class Home extends React.Component {
     let value = this.state.portfolio.reduce(function(acc, stock) {
         return acc + stock.value;
       }, 0);
-
     return value;
   }
 
@@ -58,6 +58,14 @@ export class Home extends React.Component {
     })
   }
 
+  modal_success(form) {
+
+    form.value = form.price * form.quantity;
+    this.setState({
+      portfolio: this.state.portfolio.concat(form)
+    })
+    this.toggle_modal();
+  }
 
 
   render() {
@@ -97,6 +105,7 @@ export class Home extends React.Component {
         <Modal
           visible={this.state.tickerModal}
           toggle_modal={this.toggle_modal}
+          modal_success={this.modal_success}
         />
 
       </div>

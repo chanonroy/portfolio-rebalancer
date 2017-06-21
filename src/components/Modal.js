@@ -9,12 +9,11 @@ export class Modal extends React.Component {
     super(props);
 
     this.state = {
-      toggle_modal: props.toggle_modal,
       form: {
         ticker: '',
         target: '',
         price: '',
-        quantity: ''
+        quantity: '',
       }
     };
   }
@@ -26,14 +25,13 @@ export class Modal extends React.Component {
   }
 
   render() {
-    var visible = this.props.visible;
 
     return (
       <Dialog
         title="Tips"
         size="tiny"
-        visible={ visible }
-        onCancel={ this.state.toggle_modal }
+        visible={ this.props.visible }
+        onCancel={ this.props.toggle_modal }
         lockScroll={ false }
       >
 
@@ -70,8 +68,8 @@ export class Modal extends React.Component {
         </Dialog.Body>
 
         <Dialog.Footer>
-          <Button type="primary" onClick={ this.state.toggle_modal }>Confirm</Button>
-          <Button onClick={ this.state.toggle_modal }>Cancel</Button>
+          <Button type="primary" onClick={() => { this.props.modal_success(this.state.form) }}>Confirm</Button>
+          <Button onClick={this.props.toggle_modal}>Cancel</Button>
         </Dialog.Footer>
 
       </Dialog>
