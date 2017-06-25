@@ -15,7 +15,13 @@ function Balancer() {
        target: 0.5
      }
    ];
-   this.capital = 30;
+   this.market_val = this.stocks.reduce(function(acc,val){
+     prod = val.price * val.quantity
+     return acc + prod
+   },0)
+
+   this.cash = 0
+   this.capital = this.market_val + this.cash;
    this.actions = [];
 
    // ---- Methods ----
@@ -59,6 +65,7 @@ function Balancer() {
      }
      console.log(this.capital);
      console.log(this.actions);
+     console.log(this.market_val);
    };
 
  }
