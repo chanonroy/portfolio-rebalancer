@@ -22,14 +22,25 @@ export class Home extends React.Component {
           ticker: 'CIX',
           quantity: 10,
           price: 3.68,
-          target: 0.5,
+          target: 0.4,
           value: 36.8
         }
       ],
+      form: {
+        ticker: '',
+        target: '',
+        price: '',
+        quantity: '',
+      },
+      form_type: '',
+      form_index: '',
       cash: 0,
       actions: []
     };
 
+    this.add_stock = this.add_stock.bind(this);
+    this.edit_stock = this.edit_stock.bind(this);
+    this.form_change = this.form_change.bind(this);
     this.total_value = this.total_value.bind(this);
     this.total_capital = this.total_capital.bind(this);
     this.total_allocation = this.total_allocation.bind(this);
@@ -42,10 +53,11 @@ export class Home extends React.Component {
     let total_value = this.total_value();
     let total_capital = this.total_capital();
     let total_allocation = this.total_allocation;
+    let edit_stock = this.edit_stock;
 
     return (
       <div className="container">
-        <Button type="primary" onClick={this.toggle_modal}> Add Ticker </Button>
+        <Button type="primary" onClick={this.add_stock}> Add Ticker </Button>
         <Button type="primary" onClick={this.get_actions}> Generate Report </Button>
 
         <Layout.Row className="row-header text-muted">
@@ -69,6 +81,8 @@ export class Home extends React.Component {
                 target={x.target}
                 value={x.value}
                 total_capital={total_capital}
+                index={index}
+                edit_stock={edit_stock}
               />
            );
         })}
@@ -79,6 +93,9 @@ export class Home extends React.Component {
           visible={this.state.tickerModal}
           toggle_modal={this.toggle_modal}
           modal_success={this.modal_success}
+          form={this.state.form}
+          form_type={this.state.form_type}
+          form_change={this.form_change}
         />
 
       </div>
@@ -105,51 +122,90 @@ export class Home extends React.Component {
   }
 
   // Methods ----
+  edit_stock(index) {
+    let cloned_form = JSON.parse(JSON.stringify(this.state.portfolio[index]));
+    this.setState({
+      form: cloned_form,
+      form_type: 'edit',
+      form_index: index,
+    });
+    this.toggle_modal();
+  }
+
+  add_stock() {
+    this.setState({
+      form: {
+        ticker: '',
+        target: '',
+        price: '',
+        quantity: '',
+      },
+      form_type: 'add'
+    });
+    this.toggle_modal();
+  }
+
+  form_change(key, value) {
+    // for two-way binding on form inputs
+    this.setState({
+      form: Object.assign(this.state.form, { [key]: value })
+    });
+  }
+
+  modal_success(form, type) {
+    form.value = form.price * form.quantity;
+
+    if (type === 'add') {
+      this.setState({ portfolio: this.state.portfolio.concat(form) });
+    }
+
+    if (type === 'edit') {
+      let updated_list = this.state.portfolio;
+      updated_list[this.state.form_index] = form;
+      this.setState({ portfolio: updated_list })
+    }
+
+    this.toggle_modal();
+  }
+
   toggle_modal() {
     this.setState({
       tickerModal: !this.state.tickerModal
     })
   }
 
-  modal_success(form) {
-    form.value = form.price * form.quantity;
-    this.setState({
-      portfolio: this.state.portfolio.concat(form)
-    })
-    this.toggle_modal();
-  }
-
-  /**
-  * {Float} price - price of stock
-  * {Float} total_money - total assets
-  * {Float} target - percentage (out of 1)
-  */
-  optimal_calc(price, total_money, target) {
-    var tmp = target * total_money / price;
-    var optimal = Number(tmp);
-    return optimal;
-  }
-
-  /**
-  * {Float} optimal - ideal percentage
-  * {Number} total_money - total capital
-  */
-  rebalance(optimal, quantity) {
-    var delta = optimal - quantity;
-    return delta;
-  }
-
   get_actions() {
     var local_actions = [];
     var portfolio = this.state.portfolio;
 
+    /**
+    * {Float} price - price of stock
+    * {Float} total_money - total assets
+    * {Float} target - percentage (out of 1)
+    */
+    function optimal_calc(price, total_money, target) {
+      var tmp = target * total_money / price;
+      var optimal = Number(tmp);
+      return optimal;
+    }
+
+    /**
+    * {Float} optimal - ideal percentage
+    * {Number} total_money - total capital
+    */
+    function rebalance(optimal, quantity) {
+      var delta = optimal - quantity;
+      return delta;
+    }
+
     for (var i in portfolio) {
-      let optimal = this.optimal_calc(portfolio[i].price, this.total_capital(), portfolio[i].target);
-      let delta = this.rebalance(optimal, portfolio[i].quantity);
+      let optimal = optimal_calc(portfolio[i].price, this.total_capital(), portfolio[i].target);
+      let delta = rebalance(optimal, portfolio[i].quantity);
       if (delta !== 0) {
         local_actions.push({ ticker: portfolio[i].ticker, action: Math.round(delta) })
       }
     }
+
     this.setState({
       actions: local_actions
     })

@@ -15,7 +15,7 @@ export function Stock(props) {
         <Layout.Col sm="3"> {Math.round(props.value / props.total_capital * 100)}% </Layout.Col>
         <Layout.Col sm="3"> -- </Layout.Col>
         <Layout.Col sm="1">
-          <i className="fa fa-pencil fa-fw" aria-hidden="true"></i>
+          <i className="fa fa-pencil fa-fw" onClick={() => { props.edit_stock(props.index) }} aria-hidden="true"></i>
           <i className="fa fa-trash fa-fw" aria-hidden="true"></i>
         </Layout.Col>
       </Layout.Row>
