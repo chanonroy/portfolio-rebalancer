@@ -27,7 +27,7 @@ export function Modal(props) {
               </Layout.Col>
 
               <Layout.Col lg="12">
-                <Form.Item label="Target Allocation">
+                <Form.Item label="Target Allocation (%)">
                   <Input value={props.form.target} onChange={props.form_change.bind(this, 'target')}></Input>
                 </Form.Item>
               </Layout.Col>
