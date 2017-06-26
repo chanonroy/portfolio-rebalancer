@@ -3,16 +3,40 @@ function Balancer() {
   // --- Data ----
    this.stocks = [
      {
-       ticker: 'XIC',
-       price: 10,
-       quantity: 5,
-       target: 0.4
+       ticker: 'FB',
+       price: 155.07,
+       quantity: 8,
+       target: 0.2
      },
      {
-       ticker: 'VTI',
-       price: 5,
+       ticker: 'GOOG',
+       price: 986.09,
+       quantity: 7,
+       target: 0.3
+     },
+     {
+       ticker: 'AAPL',
+       price: 146.28,
        quantity: 3,
-       target: 0.6
+       target: 0.1
+     },
+     {
+       ticker: 'GME',
+       price: 34.19,
+       quantity: 3,
+       target: 0.06
+     },
+     {
+       ticker: 'WM',
+       price: 73.43,
+       quantity: 11,
+       target: 0.2
+     },
+     {
+       ticker: 'NKE',
+       price: 52.85,
+       quantity: 6,
+       target: 0.14
      }
    ];
 
@@ -23,7 +47,7 @@ function Balancer() {
    },0)
 
    //Cash
-   this.cash = 0
+   this.cash = 1000
    //Total Capital
    this.capital = this.market_val + this.cash;
    this.actions = [];
@@ -111,8 +135,6 @@ function Balancer() {
             } else {break;}
           }
 
-          //Determine new cash balance and clear actions
-          this.cash = this.capital - this.market_val_new
           this.actions = [];
 
           //Recreate actions for console log
@@ -125,6 +147,9 @@ function Balancer() {
           }
         }
 
+     //Determine new cash balance and clear actions
+     this.cash = (this.capital - this.market_val_new).toFixed(2);
+
      //Post to console if the sum of target weights is above 1.
      if (this.target_check > 1) {
 
@@ -132,10 +157,10 @@ function Balancer() {
 
      } else {
 
-       console.log(this.capital);
+       console.log("You have", this.capital, "in assets.");
        console.log(this.actions);
-       console.log(this.market_val_new);
-       console.log(this.cash);
+       console.log("You have", this.market_val_new, "in stocks.");
+       console.log("You have", this.cash, "in cash.");
      }
    };
 
