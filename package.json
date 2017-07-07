@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "cross-env NODE_ENV=dev webpack-dev-server --hot --inline",
-    "build": "cross-env NODE_ENV=prod webpack --hide-modules"
+    "build": "cross-env NODE_ENV=prod webpack --hide-modules",
+    "test": "mocha"
   },
   "babel": {
     "presets": [
@@ -42,10 +43,12 @@
     "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
+    "chai": "^4.0.2",
     "element-react": "^1.0.11",
     "element-theme-default": "^1.3.7",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.4",
+    "mocha": "^3.4.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-router-dom": "^4.1.1"
