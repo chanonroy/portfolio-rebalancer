@@ -4,12 +4,14 @@ import { Button, Layout } from 'element-react';
 import { Stock } from '../components/Stock';
 import { Modal } from '../components/Modal';
 
+const Rebalancer = require('../rebalancer');
+
 export class Home extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      tickerModal: false,
+      show_modal: false,
       portfolio: [
         {
           ticker: 'VIC',
@@ -26,7 +28,7 @@ export class Home extends React.Component {
           value: 36.8
         }
       ],
-      form: {
+      form_holder: {
         ticker: '',
         target: '',
         price: '',
@@ -40,7 +42,7 @@ export class Home extends React.Component {
 
     this.add_stock = this.add_stock.bind(this);
     this.edit_stock = this.edit_stock.bind(this);
-    this.form_change = this.form_change.bind(this);
+    this.prepare_form = this.prepare_form.bind(this);
     this.total_value = this.total_value.bind(this);
     this.total_capital = this.total_capital.bind(this);
     this.total_allocation = this.total_allocation.bind(this);
@@ -90,12 +92,11 @@ export class Home extends React.Component {
         <div> {JSON.stringify(this.state.actions)} </div>
 
         <Modal
-          visible={this.state.tickerModal}
+          visible={this.state.show_modal}
           toggle_modal={this.toggle_modal}
           modal_success={this.modal_success}
-          form={this.state.form}
+          form={this.state.form_holder}
           form_type={this.state.form_type}
-          form_change={this.form_change}
         />
 
       </div>
@@ -115,26 +116,31 @@ export class Home extends React.Component {
   }
 
   total_allocation() {
-    let allocation = this.portfolio.reduce(function(acc, stock) {
+    let allocation = this.state.portfolio.reduce(function(acc, stock) {
       return acc + stock.target;
     }, 0);
     return allocation;
   }
 
   // Methods ----
-  edit_stock(index) {
-    let cloned_form = JSON.parse(JSON.stringify(this.state.portfolio[index]));
+  prepare_form(cloned_form, index) {
     this.setState({
-      form: cloned_form,
+      form_holder: cloned_form,
       form_type: 'edit',
       form_index: index,
     });
+    console.log(this);
+  }
+
+  edit_stock(index) {
+    let cloned_form = JSON.parse(JSON.stringify(this.state.portfolio[index]));
+    this.prepare_form(cloned_form, index);
     this.toggle_modal();
   }
 
   add_stock() {
     this.setState({
-      form: {
+      form_holder: {
         ticker: '',
         target: '',
         price: '',
@@ -145,15 +151,12 @@ export class Home extends React.Component {
     this.toggle_modal();
   }
 
-  form_change(key, value) {
-    // for two-way binding on form inputs
-    this.setState({
-      form: Object.assign(this.state.form, { [key]: value })
-    });
-  }
-
-  modal_success(form, type) {
+  modal_success(form) {
     form.value = form.price * form.quantity;
+    form.target = form.target / 100;
+
+    let type = this.state.form_type;
+    let allocation = this.total_allocation();
 
     if (type === 'add') {
       this.setState({ portfolio: this.state.portfolio.concat(form) });
@@ -170,7 +173,7 @@ export class Home extends React.Component {
 
   toggle_modal() {
     this.setState({
-      tickerModal: !this.state.tickerModal
+      show_modal: !this.state.show_modal
     })
   }
 

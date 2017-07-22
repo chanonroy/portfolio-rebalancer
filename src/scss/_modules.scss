@@ -7,6 +7,10 @@
   padding: 20px;
 }
 
+.el-message {
+  z-index: 5000;
+}
+
 .stats-header {
   // header for statistics
   text-align: center;
