@@ -70,8 +70,7 @@ export class Home extends React.Component {
           <Layout.Col sm="3"> Value </Layout.Col>
           <Layout.Col sm="3"> Target </Layout.Col>
           <Layout.Col sm="3"> Actual </Layout.Col>
-          <Layout.Col sm="2"> Action </Layout.Col>
-          <Layout.Col sm="1"> </Layout.Col>
+          <Layout.Col sm="3"> </Layout.Col>
         </Layout.Row>
 
         {this.state.portfolio.map(function(x, index) {

@@ -1,10 +1,15 @@
 .card {
   // basic card class with padding
+  display: flex;
+  align-items: center;
   background-color: white;
   box-shadow: $shadow-default;
   border-radius: $border-radius-default;
   margin: 7px 0;
   padding: 20px;
+  &__links {
+    text-align: right;
+  }
 }
 
 .el-message {

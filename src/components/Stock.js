@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import propTypes from 'prop-types';
-import { Layout } from 'element-react';
+import { Button, Layout } from 'element-react';
 
 export function Stock(props) {
 
@@ -13,10 +13,9 @@ export function Stock(props) {
         <Layout.Col sm="3"> ${props.value} </Layout.Col>
         <Layout.Col sm="3"> {props.target * 100}% </Layout.Col>
         <Layout.Col sm="3"> {Math.round(props.value / props.total_capital * 100)}% </Layout.Col>
-        <Layout.Col sm="3"> -- </Layout.Col>
-        <Layout.Col sm="1">
-          <i className="fa fa-pencil fa-fw" onClick={() => { props.edit_stock(props.index) }} aria-hidden="true"></i>
-          <i className="fa fa-trash fa-fw" aria-hidden="true"></i>
+        <Layout.Col sm="4" className="card__links">
+          <Button plain={true} type="warning" onClick={() => { props.edit_stock(props.index) }}> Edit </Button>
+          <Button plain={true} type="danger"> <i className="fa fa-trash" aria-hidden="true"></i> </Button>
         </Layout.Col>
       </Layout.Row>
     )
