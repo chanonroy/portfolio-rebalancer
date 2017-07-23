@@ -16,18 +16,20 @@ export class Modal extends React.Component  {
         price: '',
         quantity: '',
       },
-      rules: {
-        ticker: [
-          { required: true, message: 'Please input a ticker', trigger: 'blur'}
-        ]
-      }
+      // rules: {
+      //   target: [
+      //     { required: true, message: 'Please set a target allocation', trigger: 'blur'}
+      //   ],
+      // }
     }
 
+    this.close_modal = this.close_modal.bind(this);
+    this.toggle_modal = this.props.toggle_modal;
+    this.editForm = this.editForm.bind(this);
   }
 
   onSubmit(e) {
     e.preventDefault();
-    
     this.refs.form.validate((valid) => {
       if (valid) {
         let cloned_form = JSON.parse(JSON.stringify(this.state.form));
@@ -43,6 +45,18 @@ export class Modal extends React.Component  {
     this.setState({
       form: Object.assign(this.state.form, { [key]: value })
     });
+  }
+
+  editForm(form, index) {
+    form.target = form.target * 100;
+    this.setState({
+      form: form
+    })
+  }
+
+  close_modal() {
+    Object.keys(this.state.form).forEach(i => this.state.form[i] = '')
+    this.toggle_modal();
   }
 
   render() {
@@ -67,19 +81,19 @@ export class Modal extends React.Component  {
               </Layout.Col>
 
               <Layout.Col lg="12">
-                <Form.Item label="Target Allocation (%)">
+                <Form.Item label="Target Allocation (%)" prop="target">
                   <Input value={this.state.form.target} onChange={this.onChange.bind(this, 'target')}></Input>
                 </Form.Item>
               </Layout.Col>
 
               <Layout.Col lg="12">
-                <Form.Item label="Price">
+                <Form.Item label="Price" prop="price">
                   <Input value={this.state.form.price} onChange={this.onChange.bind(this, 'price')}></Input>
                 </Form.Item>
               </Layout.Col>
 
               <Layout.Col lg="12">
-                <Form.Item label="Quantity">
+                <Form.Item label="Quantity" prop="quantity">
                   <Input value={this.state.form.quantity} onChange={this.onChange.bind(this, 'quantity')}></Input>
                 </Form.Item>
               </Layout.Col>
@@ -90,7 +104,7 @@ export class Modal extends React.Component  {
 
         <Dialog.Footer>
           <Button type="primary" onClick={ this.onSubmit.bind(this) }>Confirm</Button>
-          <Button onClick={this.props.toggle_modal}>Cancel</Button>
+          <Button onClick={this.close_modal}>Cancel</Button>
         </Dialog.Footer>
 
       </Dialog>

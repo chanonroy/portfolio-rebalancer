@@ -3,7 +3,6 @@ import Tools from '../utility.js'
 import { Button, Layout } from 'element-react';
 import { Stock } from '../components/Stock';
 import { Modal } from '../components/Modal';
-
 const Rebalancer = require('../rebalancer');
 
 export class Home extends React.Component {
@@ -40,12 +39,14 @@ export class Home extends React.Component {
       actions: []
     };
 
-    this.add_stock = this.add_stock.bind(this);
-    this.edit_stock = this.edit_stock.bind(this);
-    this.prepare_form = this.prepare_form.bind(this);
     this.total_value = this.total_value.bind(this);
     this.total_capital = this.total_capital.bind(this);
     this.total_allocation = this.total_allocation.bind(this);
+
+    this.add_stock = this.add_stock.bind(this);
+    this.edit_stock = this.edit_stock.bind(this);
+    this.prepare_form = this.prepare_form.bind(this);
+
     this.toggle_modal = this.toggle_modal.bind(this);
     this.modal_success = this.modal_success.bind(this);
     this.get_actions = this.get_actions.bind(this);
@@ -92,11 +93,11 @@ export class Home extends React.Component {
         <div> {JSON.stringify(this.state.actions)} </div>
 
         <Modal
+          ref="Modal"
           visible={this.state.show_modal}
           toggle_modal={this.toggle_modal}
+          total_allocation={this.total_allocation}
           modal_success={this.modal_success}
-          form={this.state.form_holder}
-          form_type={this.state.form_type}
         />
 
       </div>
@@ -135,24 +136,17 @@ export class Home extends React.Component {
   edit_stock(index) {
     let cloned_form = JSON.parse(JSON.stringify(this.state.portfolio[index]));
     this.prepare_form(cloned_form, index);
+    this.refs.Modal.editForm(cloned_form, index);
     this.toggle_modal();
   }
 
   add_stock() {
-    this.setState({
-      form_holder: {
-        ticker: '',
-        target: '',
-        price: '',
-        quantity: '',
-      },
-      form_type: 'add'
-    });
+    this.setState({ form_type: 'add' });
     this.toggle_modal();
   }
 
   modal_success(form) {
-    form.value = form.price * form.quantity;
+    form.value = Math.round(form.price * form.quantity * 100) / 100;
     form.target = form.target / 100;
 
     let type = this.state.form_type;
@@ -172,45 +166,16 @@ export class Home extends React.Component {
   }
 
   toggle_modal() {
-    this.setState({
-      show_modal: !this.state.show_modal
-    })
+    this.setState({ show_modal: !this.state.show_modal })
   }
 
   get_actions() {
-    var local_actions = [];
-    var portfolio = this.state.portfolio;
+    var result = new Rebalancer(this.state.portfolio, this.state.cash).main();
 
-    /**
-    * {Float} price - price of stock
-    * {Float} total_money - total assets
-    * {Float} target - percentage (out of 1)
-    */
-    function optimal_calc(price, total_money, target) {
-      var tmp = target * total_money / price;
-      var optimal = Number(tmp);
-      return optimal;
-    }
-
-    /**
-    * {Float} optimal - ideal percentage
-    * {Number} total_money - total capital
-    */
-    function rebalance(optimal, quantity) {
-      var delta = optimal - quantity;
-      return delta;
-    }
-
-    for (var i in portfolio) {
-      let optimal = optimal_calc(portfolio[i].price, this.total_capital(), portfolio[i].target);
-      let delta = rebalance(optimal, portfolio[i].quantity);
-      if (delta !== 0) {
-        local_actions.push({ ticker: portfolio[i].ticker, action: Math.round(delta) })
-      }
-    }
+    // has more info beyond actions that we can pull in
 
     this.setState({
-      actions: local_actions
+      actions: result.actions
     })
   }
 

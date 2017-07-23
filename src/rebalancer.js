@@ -6,13 +6,13 @@ function Rebalancer(portfolio, cash) {
 
     // Check to make sure target weights sum to <= 1
     this.target_check = this.stocks.reduce(function(acc,val){
-      check_i = val.target
+      var check_i = val.target
       return acc + check_i
     },0)
 
     // Calculate the market value of the portfolio
     this.market_val = this.stocks.reduce(function(acc,val){
-      prod = val.price * val.quantity
+      var prod = val.price * val.quantity
       return acc + prod
     },0)
 
@@ -75,7 +75,7 @@ function Rebalancer(portfolio, cash) {
 
         // Calculate the new market value of the portfolio
         this.market_val_new = this.stocks.reduce(function(acc,val){
-           prod = val.price * val.quantity_new
+           var prod = val.price * val.quantity_new
            return acc + prod
         },0)
 
