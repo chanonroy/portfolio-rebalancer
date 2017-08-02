@@ -1,8 +1,14 @@
-function Rebalancer(portfolio, cash) {
+function Rebalancer(portfolio, cash, v_cost_buy, v_cost_sell, f_cost_buy, f_cost_sell) {
 
     // Variables assigned from object parameters
     this.stocks = portfolio;
     this.cash = cash;
+
+    this.v_cost_buy = v_cost_buy;
+    this.v_cost_sell = v_cost_sell;
+
+    this.f_cost_buy = f_cost_buy;
+    this.f_cost_sell = f_cost_sell;
 
     // Check to make sure target weights sum to <= 1
     this.target_check = this.stocks.reduce(function(acc,val){
@@ -45,6 +51,13 @@ function Rebalancer(portfolio, cash) {
 
      };
 
+     //Determine whether worth rebalancing asset or not
+     this.rebalance_decision = function(total_money, v_cost_buy, v_cost_sell, f_cost_buy, f_cost_sell) {
+
+       var boundary = (Math.sqrt((f_cost_buy + f_cost_sell)/(4*total_money)) + (v_cost_buy + v_cost_sell)/4)/100
+       return boundary
+     }
+
      // Helper function to sort an array by a key
      this.sortByKey = function(array, key) {
        return array.sort(function(a,b) { return a[key] - b[key];});
@@ -58,16 +71,32 @@ function Rebalancer(portfolio, cash) {
          return;
        }
 
+       var boundary = this.rebalance_decision(this.capital, this.v_cost_buy, this.v_cost_sell, this.f_cost_buy, this.f_cost_sell)
+
        for (var i in this.stocks) {
+          this.stocks[i].prop = this.stocks[i].quantity*this.stocks[i].price/this.capital;
 
           var optimal = this.optimal_calc(this.stocks[i].price, this.capital, this.stocks[i].target);
-          var delta = this.rebalance(optimal, this.stocks[i].quantity);
+
+          this.stocks[i].boundary = boundary;
+
+          if (this.stocks[i].prop > this.stocks[i].target + boundary || this.stocks[i].prop < this.stocks[i].target - boundary) {
+
+            var delta = this.rebalance(optimal, this.stocks[i].quantity);
+
+          } else {
+
+            var delta = 0;
+
+          }
 
           // Calculate new quantity of each asset
-          this.stocks[i].quantity_new = this.stocks[i].quantity + delta
+          this.stocks[i].quantity_new = this.stocks[i].quantity + delta;
 
           this.actions.push({
             ticker: this.stocks[i].ticker,
+            boundary: this.stocks[i].boundary,
+            prop: this.stocks[i].prop,
             action: delta
           });
 
@@ -102,8 +131,11 @@ function Rebalancer(portfolio, cash) {
 
           // Recreate actions for console log
           for (var i in this.stocks) {
+
             this.actions.push({
               ticker: this.stocks[i].ticker,
+              boundary: this.stocks[i].boundary,
+              prop: this.stocks[i].prop,
               action: this.stocks[i].quantity_new - this.stocks[i].quantity
             });
           }
@@ -121,6 +153,7 @@ function Rebalancer(portfolio, cash) {
           "actions": this.actions,
           "cash": this.cash,
           "market_value": this.market_val_new,
+          "boundary": this.boundary,
           "total_actions": Math.abs(total_actions)
        }
 
