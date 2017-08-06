@@ -1,14 +1,17 @@
-function Rebalancer(portfolio, cash, v_cost_buy, v_cost_sell, f_cost_buy, f_cost_sell) {
+/**
+* {Array} portfolio - array of objects (ticker, price, quantity, target)
+* {Number} cash - cash available
+* {Object} cost_object - variable/fixed transaction costs (v_buy, v_sell, f_buy, f_sell)
+*/
+function Rebalancer(portfolio, cash, cost_object) {
 
     // Variables assigned from object parameters
     this.stocks = portfolio;
     this.cash = cash;
-
-    this.v_cost_buy = v_cost_buy;
-    this.v_cost_sell = v_cost_sell;
-
-    this.f_cost_buy = f_cost_buy;
-    this.f_cost_sell = f_cost_sell;
+    this.v_cost_buy = cost_object.v_buy;
+    this.v_cost_sell = cost_object.v_sell;
+    this.f_cost_buy = cost_object.f_buy;
+    this.f_cost_sell = cost_object.f_sell;
 
     // Check to make sure target weights sum to <= 1
     this.target_check = this.stocks.reduce(function(acc,val){

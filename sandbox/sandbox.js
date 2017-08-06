@@ -20,15 +20,16 @@ var portfolio = [
     value: 36.8
   }
 ]
-//Enter variable cost here
-var v_cost_buy = 5;
-var v_cost_sell = 0;
 
-//Enter fixed cost here
-var f_cost_buy = 0;
-var f_cost_sell = 0;
+// Variable and Fixed Transaction costs
+var cost_object = {
+    'v_buy': 5,
+    'v_sell': 0,
+    'f_buy': 0,
+    'f_sell': 0,
+}
 
 // Instantiate object, compute, and log to console
-var rb = new Rebalancer(portfolio, cash, v_cost_buy, v_cost_sell, f_cost_buy, f_cost_sell);
+var rb = new Rebalancer(portfolio, cash, cost_object);
 var result = rb.main();
 console.log(JSON.stringify(result));
