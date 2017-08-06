@@ -8,4 +8,9 @@ describe('Simple tests', function() {
     var result = new Rebalancer(test2, 0).main();
     assert.equal(result.total_actions, 0);
   });
+  it('should not have actions when there is no cash', function() {
+    var result = new Rebalancer(test2, 0).main();
+    assert.equal(result.total_actions, 0);
+  });
 });
+

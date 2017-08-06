@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=dev webpack-dev-server --hot --inline",
     "build": "cross-env NODE_ENV=prod webpack --hide-modules",
-    "log": "node test/sandbox.js",
+    "log": "node sandbox/sandbox.js",
     "test": "mocha"
   },
   "babel": {
