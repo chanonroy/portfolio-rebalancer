@@ -15,7 +15,9 @@ export function Stock(props) {
         <Layout.Col sm="3"> {Math.round(props.value / props.total_capital * 100)}% </Layout.Col>
         <Layout.Col sm="4" className="card__links">
           <Button plain={true} type="warning" onClick={() => { props.edit_stock(props.index) }}> Edit </Button>
-          <Button plain={true} type="danger"> <i className="fa fa-trash" aria-hidden="true"></i> </Button>
+          <Button plain={true} type="danger" onClick={() => { props.delete_stock(props.ticker) }}> 
+            <i className="fa fa-trash" aria-hidden="true"></i>
+          </Button>
         </Layout.Col>
       </Layout.Row>
     )

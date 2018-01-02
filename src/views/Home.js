@@ -11,6 +11,12 @@ export class Home extends React.Component {
 
     this.state = {
       show_modal: false,
+      cost_object: {
+        'v_buy': 5,
+        'v_sell': 0,
+        'f_buy': 0,
+        'f_sell': 0,
+      },
       portfolio: [
         {
           ticker: 'VIC',
@@ -45,6 +51,7 @@ export class Home extends React.Component {
 
     this.add_stock = this.add_stock.bind(this);
     this.edit_stock = this.edit_stock.bind(this);
+    this.delete_stock = this.delete_stock.bind(this);
     this.prepare_form = this.prepare_form.bind(this);
 
     this.toggle_modal = this.toggle_modal.bind(this);
@@ -57,6 +64,7 @@ export class Home extends React.Component {
     let total_capital = this.total_capital();
     let total_allocation = this.total_allocation;
     let edit_stock = this.edit_stock;
+    let delete_stock = this.delete_stock;
 
     return (
       <div className="container">
@@ -85,6 +93,7 @@ export class Home extends React.Component {
                 total_capital={total_capital}
                 index={index}
                 edit_stock={edit_stock}
+                delete_stock={delete_stock}
               />
            );
         })}
@@ -129,7 +138,6 @@ export class Home extends React.Component {
       form_type: 'edit',
       form_index: index,
     });
-    console.log(this);
   }
 
   edit_stock(index) {
@@ -142,6 +150,10 @@ export class Home extends React.Component {
   add_stock() {
     this.setState({ form_type: 'add' });
     this.toggle_modal();
+  }
+
+  delete_stock(ticker) {
+    console.log(ticker);
   }
 
   modal_success(form) {
@@ -169,7 +181,7 @@ export class Home extends React.Component {
   }
 
   get_actions() {
-    var result = new Rebalancer(this.state.portfolio, this.state.cash).main();
+    var result = new Rebalancer(this.state.portfolio, this.state.cash, this.state.cost_object).main();
 
     // has more info beyond actions that we can pull in
 
