@@ -7,9 +7,11 @@
   border-radius: $border-radius-default;
   margin: 7px 0;
   padding: 20px;
+
   &__links {
     text-align: right;
   }
+
 }
 
 .el-message {
@@ -25,7 +27,16 @@
   background-color: white;
 }
 
-.row-header {
-  // header for stocks
-  padding: 10px 20px;
+.table {
+
+  &__header {
+    // header for stocks
+    padding: 10px 20px;
+  }
+
+}
+
+.header-buttons {
+  text-align: right;
+  margin-bottom: 40px;
 }

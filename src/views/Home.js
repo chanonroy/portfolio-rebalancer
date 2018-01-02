@@ -42,7 +42,7 @@ export class Home extends React.Component {
       form_type: '',
       form_index: '',
       cash: 0,
-      actions: []
+      actions: '',
     };
 
     this.total_value = this.total_value.bind(this);
@@ -67,47 +67,52 @@ export class Home extends React.Component {
     let delete_stock = this.delete_stock;
 
     return (
-      <div className="container">
-        <Button type="primary" onClick={this.add_stock}> Add Ticker </Button>
-        <Button type="primary" onClick={this.get_actions}> Generate Report </Button>
+      <div>
+        <div className="container">
 
-        <Layout.Row className="row-header text-muted">
-          <Layout.Col sm="5"> Ticker </Layout.Col>
-          <Layout.Col sm="3"> Quantity </Layout.Col>
-          <Layout.Col sm="3"> Price </Layout.Col>
-          <Layout.Col sm="3"> Value </Layout.Col>
-          <Layout.Col sm="3"> Target </Layout.Col>
-          <Layout.Col sm="3"> Actual </Layout.Col>
-          <Layout.Col sm="3"> </Layout.Col>
-        </Layout.Row>
+          <div className="header-buttons">
+            <Button type="primary" onClick={this.add_stock}> Add Ticker </Button>
+            <Button type="primary" onClick={this.get_actions}> Generate Report </Button>
+          </div>
 
-        {this.state.portfolio.map(function(x, index) {
-           return (
-              <Stock
-                key={index}
-                ticker={x.ticker}
-                price={x.price}
-                quantity={x.quantity}
-                target={x.target}
-                value={x.value}
-                total_capital={total_capital}
-                index={index}
-                edit_stock={edit_stock}
-                delete_stock={delete_stock}
-              />
-           );
-        })}
+          <Layout.Row className="table__header text-muted">
+            <Layout.Col sm="5"> Ticker </Layout.Col>
+            <Layout.Col sm="3" className="text-center"> Quantity </Layout.Col>
+            <Layout.Col sm="3" className="text-center"> Price </Layout.Col>
+            <Layout.Col sm="3" className="text-center"> Value </Layout.Col>
+            <Layout.Col sm="3" className="text-center"> Target </Layout.Col>
+            <Layout.Col sm="3" className="text-center"> Actual </Layout.Col>
+            <Layout.Col sm="3"> </Layout.Col>
+          </Layout.Row>
 
-        <div> {JSON.stringify(this.state.actions)} </div>
+          {this.state.portfolio.map(function(x, index) {
+            return (
+                <Stock
+                  key={index}
+                  ticker={x.ticker}
+                  price={x.price}
+                  quantity={x.quantity}
+                  target={x.target}
+                  value={x.value}
+                  total_capital={total_capital}
+                  index={index}
+                  edit_stock={edit_stock}
+                  delete_stock={delete_stock}
+                />
+            );
+          })}
 
-        <Modal
-          ref="Modal"
-          visible={this.state.show_modal}
-          toggle_modal={this.toggle_modal}
-          total_allocation={this.total_allocation}
-          modal_success={this.modal_success}
-        />
+          <div> {JSON.stringify(this.state.actions)} </div>
 
+          <Modal
+            ref="Modal"
+            visible={this.state.show_modal}
+            toggle_modal={this.toggle_modal}
+            total_allocation={this.total_allocation}
+            modal_success={this.modal_success}
+          />
+
+        </div>
       </div>
     )
   }
@@ -153,7 +158,9 @@ export class Home extends React.Component {
   }
 
   delete_stock(ticker) {
-    console.log(ticker);
+    this.setState({
+      portfolio: this.state.portfolio.filter(e => e.ticker !== ticker)
+    })
   }
 
   modal_success(form) {
@@ -183,7 +190,12 @@ export class Home extends React.Component {
   get_actions() {
     var result = new Rebalancer(this.state.portfolio, this.state.cash, this.state.cost_object).main();
 
-    // has more info beyond actions that we can pull in
+    // result.actions
+
+    // {"ticker":"VIC","boundary":0.0125,"prop":0.5811041548093341,"action":-1}
+    // {"ticker":"CIX","boundary":0.0125,"prop":0.4188958451906659,"action":0}
+    
+    
 
     this.setState({
       actions: result.actions
